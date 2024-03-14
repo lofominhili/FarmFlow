@@ -11,6 +11,23 @@ services:
     volumes:
       - database:/var/lib/postgresql/data
 
+  farmflow:
+    container_name: 'farmflow'
+    build: .
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      STARTTLS_ENABLE: ${STARTTLS_ENABLE}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
 volumes:
   database:
 
