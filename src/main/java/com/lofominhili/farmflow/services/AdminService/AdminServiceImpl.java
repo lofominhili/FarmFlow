@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
  * Service implementation of {@link AdminService} for administrative operations.
  * This service provides methods for managing user ratings, blocking user accounts,
  * and setting harvest rates for products.
- * <p>
  * This service requires instances of {@link UserRepository}, {@link ProductRepository},
  * and {@link HarvestRateRepository} to be injected via constructor.
  *

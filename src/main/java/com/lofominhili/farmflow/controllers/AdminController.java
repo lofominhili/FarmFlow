@@ -25,7 +25,6 @@ import java.util.List;
  * REST controller for handling administrative operations.
  * This controller provides endpoints for rating users, retrieving product statistics by user and farm,
  * blocking users, and setting harvest rates.
- * <p>
  * This controller is mapped to "/api/admin" base path.
  * It requires instances of {@link AdminService} and {@link RecordService} to be injected via constructor.
  *
@@ -72,7 +71,7 @@ public class AdminController {
      * Endpoint for retrieving product statistics by user.
      * This method validates the incoming {@link StatisticByUserRequestDTO} using {@link Valid} annotation.
      * If validation fails, it throws a {@link RequestDataValidationFailedException}.
-     * Otherwise, it delegates the retrieval operation to {@link RecordService#getProductStatisticByUser(StatisticByUserRequestDTO)}.
+     * Otherwise, it delegates the retrieval operation to {@link RecordService#getProductStatisticsByUser(StatisticByUserRequestDTO)}.
      *
      * @param statisticByUserRequestDTO The {@link StatisticByUserRequestDTO} containing information about the user's email and date range.
      * @param validationResult          The result of validation performed by Spring's {@link BindingResult}.

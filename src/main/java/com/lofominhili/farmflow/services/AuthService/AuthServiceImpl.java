@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 /**
  * Service implementation of {@link AuthService} for authentication-related operations.
  * This service provides methods for user registration and user sign-in.
- * <p>
  * This service requires instances of {@link UserRepository}, {@link PasswordEncoder}, {@link JwtService},
  * {@link UserMapper}, and {@link AuthenticationManager} to be injected via constructor.
  *

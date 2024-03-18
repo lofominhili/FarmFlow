@@ -30,7 +30,6 @@ import java.util.Set;
  * Service implementation of {@link RecordService} for managing records and statistics related to products and users.
  * This service provides methods for retrieving product statistics by user, product statistics by farm,
  * and sending daily statistics via email.
- * <p>
  * This service requires instances of {@link RecordRepository}, {@link UserRepository}, {@link JavaMailSender},
  * and {@link ObjectMapper} to be injected via constructor.
  *

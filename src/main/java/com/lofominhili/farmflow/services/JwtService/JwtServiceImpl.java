@@ -21,7 +21,6 @@ import java.util.function.Function;
 /**
  * Service implementation of {@link JwtService} for JWT (JSON Web Token) operations.
  * This service provides methods for generating, extracting, and validating JWT tokens.
- * <p>
  * This service requires configuration properties for the secret key and token lifetime
  * to be injected via Spring's {@code @Value} annotation.
  *

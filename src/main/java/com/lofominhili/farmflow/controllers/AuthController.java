@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for handling authentication operations.
  * This controller provides endpoints for user registration and user sign-in.
- * <p>
  * This controller is mapped to "/api/auth" base path.
  * It requires an instance of {@link AuthService} to be injected via constructor.
  *

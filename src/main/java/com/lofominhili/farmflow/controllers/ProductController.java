@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for handling product-related operations.
  * This controller provides endpoints for registering products and adding collected products.
- * <p>
  * This controller is mapped to "/api/product" base path.
  * It requires an instance of {@link ProductService} to be injected via constructor.
  *

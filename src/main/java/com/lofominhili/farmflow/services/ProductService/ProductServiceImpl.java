@@ -24,7 +24,6 @@ import java.util.Optional;
  * Service implementation of {@link ProductService}for product-related operations.
  * This service provides methods for registering new products, adding collected products,
  * and managing harvest rates.
- * <p>
  * This service requires instances of {@link ProductRepository}, {@link ProductMapper},
  * {@link RecordRepository}, {@link HarvestRateRepository}, and {@link HarvestRateMapper}
  * to be injected via constructor.
