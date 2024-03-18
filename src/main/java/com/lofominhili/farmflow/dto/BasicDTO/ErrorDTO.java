@@ -10,7 +10,8 @@ import java.io.Serializable;
 public class ErrorDTO implements Serializable {
 
     private final Integer statusCode;
-    private final String exception;
-    private final String message;
 
+    private final String exception;
+
+    private final String message;
 }

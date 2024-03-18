@@ -1,6 +1,6 @@
 package com.lofominhili.farmflow.mappers;
 
-import com.lofominhili.farmflow.dto.ProductDTO;
+import com.lofominhili.farmflow.dto.EntityDTO.ProductDTO;
 import com.lofominhili.farmflow.entities.ProductEntity;
 import com.lofominhili.farmflow.utils.Measure;
 import org.mapstruct.Mapper;

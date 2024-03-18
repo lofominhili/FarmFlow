@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Map;
 
 public interface JwtService {
-
     String extractEmail(String token);
 
     String generateToken(UserDetails userDetails);
@@ -19,5 +18,4 @@ public interface JwtService {
 
     @Nullable
     String getToken(HttpServletRequest request);
-
 }

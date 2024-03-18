@@ -6,11 +6,14 @@ import com.lofominhili.farmflow.utils.Measure;
 
 import java.util.List;
 
-public record StatisticByFarmResponseDTO(
+public record StatisticsByFarmResponseDTO(
         @JsonProperty(value = "product_name")
         String productName,
+
         List<String> email,
+
         Integer amount,
+
         @JsonFormat(shape = JsonFormat.Shape.STRING)
         Measure measure
 ) {

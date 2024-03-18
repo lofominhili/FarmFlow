@@ -41,10 +41,9 @@ public class SecurityConfig {
 
     protected static final String[] ENDPOINTS_ADMIN = {
             "/api/admin/*",
-            "/api/auth/registrate-user",
-            "/api/product/registrate-product"
+            "/api/auth/register-user",
+            "/api/product/register-product"
     };
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -62,7 +61,6 @@ public class SecurityConfig {
                     auth.requestMatchers(ENDPOINTS_WHITELIST).permitAll();
                     auth.requestMatchers(ENDPOINTS_ADMIN).hasAuthority(Role.ADMIN.toString());
                     auth.anyRequest().authenticated();
-
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .exceptionHandling(exception -> {
@@ -81,7 +79,8 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return email -> userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return email -> userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
@@ -101,7 +100,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(UserRepository userRepository) {
         return new ProviderManager(authenticationProvider(userRepository));
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

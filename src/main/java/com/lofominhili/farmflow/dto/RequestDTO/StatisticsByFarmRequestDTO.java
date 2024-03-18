@@ -4,10 +4,11 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record StatisticByFarmRequestDTO(
-        @NotNull(message = "begin date must not be null!")
+public record StatisticsByFarmRequestDTO(
+        @NotNull(message = "Begin date cannot be null!")
         LocalDate begin,
-        @NotNull(message = "end date must not be null!")
+
+        @NotNull(message = "End date cannot be null!")
         LocalDate end
 ) {
 }

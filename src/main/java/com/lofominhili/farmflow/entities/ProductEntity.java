@@ -31,5 +31,4 @@ public class ProductEntity {
     @Column(name = "date")
     @CreatedDate
     private LocalDate date;
-
 }

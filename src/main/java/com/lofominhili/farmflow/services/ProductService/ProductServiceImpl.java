@@ -1,7 +1,7 @@
 package com.lofominhili.farmflow.services.ProductService;
 
-import com.lofominhili.farmflow.dto.HarvestRateDTO;
-import com.lofominhili.farmflow.dto.ProductDTO;
+import com.lofominhili.farmflow.dto.EntityDTO.HarvestRateDTO;
+import com.lofominhili.farmflow.dto.EntityDTO.ProductDTO;
 import com.lofominhili.farmflow.entities.HarvestRateEntity;
 import com.lofominhili.farmflow.entities.ProductEntity;
 import com.lofominhili.farmflow.entities.RecordEntity;
@@ -20,6 +20,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service implementation of {@link ProductService}for product-related operations.
+ * This service provides methods for registering new products, adding collected products,
+ * and managing harvest rates.
+ * <p>
+ * This service requires instances of {@link ProductRepository}, {@link ProductMapper},
+ * {@link RecordRepository}, {@link HarvestRateRepository}, and {@link HarvestRateMapper}
+ * to be injected via constructor.
+ *
+ * @author daniel
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -30,8 +41,18 @@ public class ProductServiceImpl implements ProductService {
     private final HarvestRateRepository harvestRateRepository;
     private final HarvestRateMapper harvestRateMapper;
 
+    /**
+     * Registers a new product with the provided product information.
+     * This method checks if a product with the given name already exists in the repository.
+     * If not, the product information is converted to a ProductEntity and saved in the repository.
+     *
+     * @param productDTO The {@link ProductDTO} containing information about the product to be registered.
+     *                   It should include the product's name, measure, and amount.
+     * @throws ProductDuplicateException If a product with the provided name already exists in the repository.
+     *                                   This exception indicates a registration failure due to duplicate product name.
+     */
     @Override
-    public void registrateProduct(ProductDTO productDTO) throws ProductDuplicateException {
+    public void registerProduct(ProductDTO productDTO) throws ProductDuplicateException {
         if (productRepository.findByName(productDTO.name()).isPresent()) {
             throw new ProductDuplicateException("This Product already exists!");
         }
@@ -39,30 +60,52 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
-    @Override
+    /**
+     * Adds collected products to the specified product.
+     * This method retrieves the current user from the security context,
+     * then retrieves the product from the product repository based on the name provided in the ProductDTO.
+     * It validates the product measure and creates a record for the collected products.
+     * If a record is created, it also updates the harvest rate accordingly.
+     *
+     * @param productDTO The {@link ProductDTO} containing information about the collected product.
+     *                   It should include the product's name, measure, and amount.
+     * @return The {@link HarvestRateDTO} containing information about the updated harvest rate.
+     * @throws NotFoundException                    If the product specified in the ProductDTO is not found in the {@link ProductRepository}.
+     *                                              This exception indicates that the specified product does not exist.
+     * @throws RequestDataValidationFailedException If the measure provided in the ProductDTO does not match the registered one.
+     *                                              This exception indicates a validation failure for the product measure.
+     */
     public HarvestRateDTO addCollectedProduct(ProductDTO productDTO) throws NotFoundException, RequestDataValidationFailedException {
         UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ProductEntity product = productRepository.findByName(productDTO.name())
                 .orElseThrow(() -> new NotFoundException("Product not found!"));
-        if (!productDTO.measure().toUpperCase().equals(product.getMeasure().toString()))
-            throw new RequestDataValidationFailedException("measure does not match the registered one!");
+        validateProductAndCreateRecord(product, productDTO, currentUser);
+        return updateHarvestRateIfNeeded(product, productDTO);
+    }
+
+    private void validateProductAndCreateRecord(ProductEntity product, ProductDTO productDTO, UserEntity currentUser) throws RequestDataValidationFailedException {
+        if (!productDTO.measure().equalsIgnoreCase(product.getMeasure().toString())) {
+            throw new RequestDataValidationFailedException("Measure does not match the registered one!");
+        }
         product.setAmount(product.getAmount() + productDTO.amount());
-        Optional<HarvestRateEntity> harvestRate = harvestRateRepository.findByProduct(product);
+        productRepository.save(product);
         RecordEntity record = new RecordEntity();
         record.setProduct(product);
         record.setUser(currentUser);
         record.setAmount(productDTO.amount());
-        if (harvestRate.isPresent()) {
-            Integer difference = harvestRate.map(harvestRateEntity -> Math.max(harvestRateEntity.getAmount() - productDTO.amount(), 0)).orElse(0);
-            harvestRate.get().setAmount(difference);
-            HarvestRateDTO harvestRateDTO = harvestRateMapper.toDto(harvestRate.get());
-            harvestRateRepository.save(harvestRate.get());
-            return harvestRateDTO;
-        }
-        HarvestRateDTO harvestRateDTO = new HarvestRateDTO(product.getName(), product.getMeasure().toString(), null, 0);
-        productRepository.save(product);
         recordRepository.save(record);
-        return harvestRateDTO;
     }
+
+    private HarvestRateDTO updateHarvestRateIfNeeded(ProductEntity product, ProductDTO productDTO) {
+        Optional<HarvestRateEntity> harvestRate = harvestRateRepository.findByProduct(product);
+        if (harvestRate.isPresent()) {
+            Integer difference = Math.max(harvestRate.get().getAmount() - productDTO.amount(), 0);
+            harvestRate.get().setAmount(difference);
+            harvestRateRepository.save(harvestRate.get());
+            return harvestRateMapper.toDto(harvestRate.get());
+        }
+        return new HarvestRateDTO(product.getName(), product.getMeasure().toString(), null, 0);
+    }
+
 }
 

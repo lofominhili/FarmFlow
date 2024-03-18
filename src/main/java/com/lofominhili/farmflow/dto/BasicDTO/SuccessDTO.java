@@ -10,8 +10,9 @@ import java.io.Serializable;
 public class SuccessDTO<T> implements Serializable {
 
     private final Integer statusCode;
-    private final String subject;
-    private final T data;
 
+    private final String subject;
+
+    private final T data;
 }
 
