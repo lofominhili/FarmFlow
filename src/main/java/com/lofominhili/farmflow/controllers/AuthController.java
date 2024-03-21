@@ -7,6 +7,8 @@ import com.lofominhili.farmflow.exceptions.AuthenticationFailedException;
 import com.lofominhili.farmflow.exceptions.RequestDataValidationFailedException;
 import com.lofominhili.farmflow.services.AuthService.AuthService;
 import com.lofominhili.farmflow.utils.GlobalExceptionHandler;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author daniel
  */
+@Tag(name = "AuthController", description = "Controller class for authentication operations")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -44,6 +47,7 @@ public class AuthController {
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      * @throws AuthenticationFailedException        If the registration operation fails.
      */
+    @Operation(summary = "Register new user")
     @PostMapping("/register-user")
     public ResponseEntity<SuccessDTO<String>> registerUser(
             @Valid @RequestBody UserDTO userDTO,
@@ -73,6 +77,7 @@ public class AuthController {
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      * @throws AuthenticationFailedException        If the sign-in operation fails.
      */
+    @Operation(summary = "Logins user")
     @PostMapping("/sign-in")
     public ResponseEntity<SuccessDTO<String>> signIn(
             @Valid @RequestBody SignInRequest request,

@@ -12,6 +12,9 @@ import com.lofominhili.farmflow.exceptions.RequestDataValidationFailedException;
 import com.lofominhili.farmflow.services.AdminService.AdminService;
 import com.lofominhili.farmflow.services.RecordService.RecordService;
 import com.lofominhili.farmflow.utils.GlobalExceptionHandler;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,7 @@ import java.util.List;
  *
  * @author daniel
  */
+@Tag(name = "AdminController", description = "Controller class for admin operations")
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
@@ -50,6 +54,7 @@ public class AdminController {
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      * @throws NotFoundException                    If the user specified in the ratingDTO is not found.
      */
+    @Operation(summary = "Rates user")
     @PostMapping("/rate")
     public ResponseEntity<SuccessDTO<String>> rate(
             @Valid @RequestBody RatingDTO ratingDTO,
@@ -79,7 +84,8 @@ public class AdminController {
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      * @throws NotFoundException                    If the user specified in the statisticByUserRequestDTO is not found.
      */
-    @PostMapping("/get-statistics-by-user")
+    @Operation(summary = "Gets products statistic by user")
+    @GetMapping("/get-statistics-by-user")
     public ResponseEntity<SuccessDTO<List<StatisticByUserResponseDTO>>> getProductStatisticByUser(
             @Valid @RequestBody StatisticByUserRequestDTO statisticByUserRequestDTO,
             BindingResult validationResult
@@ -106,7 +112,8 @@ public class AdminController {
      * @return A {@link ResponseEntity} containing a list of {@link StatisticsByFarmResponseDTO} if the retrieval operation is successful.
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      */
-    @PostMapping("/get-statistics-by-farm")
+    @Operation(summary = "Gets products statistics by farm")
+    @GetMapping("/get-statistics-by-farm")
     public ResponseEntity<SuccessDTO<List<StatisticsByFarmResponseDTO>>> getProductStatisticsByFarm(
             @Valid @RequestBody StatisticsByFarmRequestDTO statisticsByFarmRequestDTO,
             BindingResult validationResult
@@ -130,8 +137,9 @@ public class AdminController {
      * @return A {@link ResponseEntity} containing a success message if the blocking operation is successful.
      * @throws NotFoundException If the user specified by the email is not found.
      */
+    @Operation(summary = "Blocks user by email")
     @PostMapping("/block/{email}")
-    public ResponseEntity<SuccessDTO<String>> block(@PathVariable String email) throws NotFoundException {
+    public ResponseEntity<SuccessDTO<String>> block(@PathVariable @Parameter(description = "The email address of the user to be blocked") String email) throws NotFoundException {
         adminService.block(email);
         return new ResponseEntity<>(
                 new SuccessDTO<>(
@@ -153,6 +161,7 @@ public class AdminController {
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      * @throws NotFoundException                    If the product specified in the harvestRateDTO is not found.
      */
+    @Operation(summary = "Sets harvest rate for product")
     @PostMapping("/set-harvest-rate")
     public ResponseEntity<SuccessDTO<String>> setHarvestRate(
             @Valid @RequestBody HarvestRateDTO harvestRateDTO,

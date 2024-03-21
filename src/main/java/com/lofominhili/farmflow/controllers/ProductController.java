@@ -8,6 +8,8 @@ import com.lofominhili.farmflow.exceptions.ProductDuplicateException;
 import com.lofominhili.farmflow.exceptions.RequestDataValidationFailedException;
 import com.lofominhili.farmflow.services.ProductService.ProductService;
 import com.lofominhili.farmflow.utils.GlobalExceptionHandler;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author daniel
  */
+@Tag(name = "ProductController", description = "Controller class for product-related operations")
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
@@ -45,6 +48,7 @@ public class ProductController {
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      * @throws ProductDuplicateException            If the product already exists.
      */
+    @Operation(summary = "Register new product")
     @PostMapping("/register-product")
     public ResponseEntity<SuccessDTO<String>> registerProduct(
             @Valid @RequestBody ProductDTO productDTO,
@@ -74,6 +78,7 @@ public class ProductController {
      * @throws RequestDataValidationFailedException If the incoming data fails validation.
      * @throws NotFoundException                    If the product specified in the productDTO is not found.
      */
+    @Operation(summary = "Add collected product by user")
     @PostMapping("/add-collected-product")
     public ResponseEntity<SuccessDTO<HarvestRateDTO>> addCollectedProduct(
             @Valid @RequestBody ProductDTO productDTO,

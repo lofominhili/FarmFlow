@@ -36,7 +36,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig {
     protected static final String[] ENDPOINTS_WHITELIST = {
-            "/api/auth/sign-in"
+            "/api/auth/sign-in",
+            "/swagger-ui/index.html",
+            "/swagger-ui/*",
+            "/v3/api-docs",
+            "/v3/api-docs/*"
     };
 
     protected static final String[] ENDPOINTS_ADMIN = {
